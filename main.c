@@ -1,6 +1,5 @@
 #include "raylib.h"
 #include <time.h>
-#include <stdlib.h>
 #include <stdbool.h>
 
 
@@ -109,7 +108,7 @@ int main()
 
     SetTargetFPS(60); // Set our game to run at 60 frames-per-second
 
-    srand(time(NULL)); // Ensure random numbers when calling rand()
+    SetRandomSeed(time(NULL)); // Ensure random numbers when calling GetRandomValue()
 
     //--------------------------------------------------------------------------------------
 
