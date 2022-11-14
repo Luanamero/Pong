@@ -14,7 +14,7 @@
 
 
 //----------------------------------------------------------------------------------
-// State Machine's enum definition
+// State Machine's enum and Ball Struct definition
 //----------------------------------------------------------------------------------
 typedef enum {
     SERVE_ENTER,
@@ -28,6 +28,13 @@ typedef enum {
 } STATE_MACHINE;
 
 
+typedef struct {
+    int x, y; // Positions on X and Y axis
+    int width, height;
+    float dx, dy; // Velocity on X and Y axis
+} tBall;
+
+
 
 //----------------------------------------------------------------------------------
 // Local Functions Declaration
@@ -36,7 +43,7 @@ typedef enum {
 // General Purposes Functions
 int min(int a, int b);
 int max(int a, int b);
-bool collides(Rectangle a, Rectangle b);
+bool collides(tBall ball, Rectangle paddle);
 
 
 // Game State Functions
@@ -61,7 +68,7 @@ static STATE_MACHINE Global_StateMachine;
 
 static Rectangle Player;
 static Rectangle AI_Paddle;
-static Rectangle Ball;
+static tBall Ball;
 
 static int PlayerPoints;
 static int AIPoints;
@@ -93,8 +100,6 @@ int main()
 
     // Ball
     Ball.width = Ball.height = 15;
-    Ball.x = SCREEN_WIDTH/2 - Ball.width/2;
-    Ball.y = SCREEN_HEIGHT/2 - Ball.height/2;
 
     // Points
     PlayerPoints = AIPoints = 0;
@@ -190,16 +195,16 @@ int max(int a, int b) {
 }
 
 
-bool collides(Rectangle a, Rectangle b) {
+bool collides(tBall ball, Rectangle paddle) {
 
     // Check if it is possible to have collision based on X axis
-    if (a.x > (b.x + b.width) || b.x > (a.x + a.width))
+    if (ball.x > (paddle.x + paddle.width) || paddle.x > (ball.x + ball.width))
     {
         return false;
     }
 
     // Check if it is possible to have collision based on Y axis
-    if (a.y > (b.y + b.height) || b.y > (a.y + a.height))
+    if (ball.y > (paddle.y + paddle.height) || paddle.y > (ball.y + ball.height))
     {
         return false;
     }
@@ -215,6 +220,8 @@ bool collides(Rectangle a, Rectangle b) {
 //----------------------------------------------------------------------------------
 void Serve_Enter() {
 
+    Ball.x = SCREEN_WIDTH/2 - Ball.width/2;
+    Ball.y = SCREEN_HEIGHT/2 - Ball.height/2;
 
     // Change State to Update
     Global_StateMachine = SERVE_UPDATE;
