@@ -233,7 +233,28 @@ void Player1_Update() {
 
 
 void Ball_Update() {
-
+    
+        // Update ball position
+        Ball.x += Ball.dx * DELTA_TIME;
+        Ball.y += Ball.dy * DELTA_TIME;
+    
+        // Check collision with top and bottom walls
+        if (Ball.y <= 0 || Ball.y >= SCREEN_HEIGHT - Ball.height) {
+            Ball.dy *= -1.03;
+        }
+    
+        // Check collision with player 1 paddle
+        if (collides(Ball, Player1)) {
+            Ball.dx *= -1.1;
+            Ball.x = Player1.x + Player1.width;
+        }
+    
+        // Check collision with player 2 paddle
+        if (collides(Ball, Player2)) {
+            Ball.dx *= -1.1;
+            Ball.x = Player2.x - Ball.width;
+        }
+             
 }
 
 
@@ -291,7 +312,10 @@ void Serve_Draw() {
 // Game State Functions
 //----------------------------------------------------------------------------------
 void Game_Enter() {
-
+    
+    Ball.dx = 20;
+    Ball.dy = 20;
+    
 
     // Change State to Update
     Global_StateMachine = GAME_UPDATE;
@@ -299,11 +323,28 @@ void Game_Enter() {
 
 
 void Game_Update() {
-
+    
+    Player1_Update();
+    Player2_Update();
+    Ball_Update();
+    if (Ball.x < 0)
+    {
+        Player2Points++;
+        Global_StateMachine = SERVE_ENTER;
+    }
+    else if (Ball.x > SCREEN_WIDTH)
+    {
+        Player1Points++;
+        Global_StateMachine = SERVE_ENTER;
+    }
 }
 
 
 void Game_Draw() {
+    
+    DrawRectangle(Player1.x, Player1.y, Player1.width, Player1.height, WHITE); // Player 1 Paddle
+    DrawRectangle(Player2.x, Player2.y, Player2.width, Player2.height, WHITE); // PLayer 2 Paddle
+    DrawRectangle(Ball.x, Ball.y, Ball.width, Ball.height, WHITE); // Ball
 
 }
 
