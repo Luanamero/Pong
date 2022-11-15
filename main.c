@@ -93,7 +93,7 @@ int main()
     // Global State Machine
     Global_StateMachine = SERVE_ENTER;
 
-    // Player and AI paddle
+    // Player1 and Player2 paddle
     Player1.width = 18;
     Player1.height = 86;
     Player1.x = LATERAL_DISTANCE;
