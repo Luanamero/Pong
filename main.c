@@ -8,7 +8,7 @@
 
 #define DELTA_TIME GetFrameTime()
 
-#define PADDLE_SPEED 400
+#define PADDLE_SPEED 650
 #define LATERAL_DISTANCE 50 // Paddle distance from screen borders
 // Paddle dimensions
 
@@ -149,8 +149,8 @@ int main()
 
         // Draw in screen
         BeginDrawing();
-        ClearBackground(BLACK); 
 
+        ClearBackground(BLACK);
         switch(Global_StateMachine)
         {
             case SERVE_ENTER:
@@ -313,8 +313,8 @@ void Serve_Draw() {
 //----------------------------------------------------------------------------------
 void Game_Enter() {
     
-    Ball.dx = 20;
-    Ball.dy = 20;
+    Ball.dx = GetRandomValue(400, 500) * (GetRandomValue(0, 1) == 0 ? 1 : -1);
+    Ball.dy = GetRandomValue(400, 500) * (GetRandomValue(0, 1) == 0 ? 1 : -1);
     
 
     // Change State to Update
@@ -327,6 +327,7 @@ void Game_Update() {
     Player1_Update();
     Player2_Update();
     Ball_Update();
+
     if (Ball.x < 0)
     {
         Player2Points++;
