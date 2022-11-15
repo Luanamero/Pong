@@ -150,7 +150,7 @@ int main()
         // Draw in screen
         BeginDrawing();
 
-        ClearBackground(BLACK);
+        ClearBackground(BLACK); 
         switch(Global_StateMachine)
         {
             case SERVE_ENTER:
@@ -298,7 +298,8 @@ void Serve_Update() {
 
 
 void Serve_Draw() {
-    DrawText("Press ENTER to start", 400, 150, 40, WHITE);
+    const int font_size =  MeasureText("Press ENTER to start", 40);
+    DrawText("Press ENTER to start", SCREEN_WIDTH/2-(font_size/2), 150, 40, WHITE);
 
     DrawRectangle(Player1.x, Player1.y, Player1.width, Player1.height, WHITE); // Player Paddle
     DrawRectangle(Player2.x, Player2.y, Player2.width, Player2.height, WHITE); // AI Paddle
@@ -342,10 +343,13 @@ void Game_Update() {
 
 
 void Game_Draw() {
-    
+    const int font_width = MeasureText(TextFormat("%i", Player1Points), 60);
+
     DrawRectangle(Player1.x, Player1.y, Player1.width, Player1.height, WHITE); // Player 1 Paddle
     DrawRectangle(Player2.x, Player2.y, Player2.width, Player2.height, WHITE); // PLayer 2 Paddle
     DrawRectangle(Ball.x, Ball.y, Ball.width, Ball.height, WHITE); // Ball
+    DrawText(TextFormat("%i", Player1Points), SCREEN_WIDTH/2-(font_width+40), 150, 60, WHITE);
+    DrawText(TextFormat("%i", Player2Points), SCREEN_WIDTH/2+(40), 150, 60, WHITE);
 
 }
 
