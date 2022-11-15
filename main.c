@@ -87,6 +87,8 @@ int main()
     // Initialization
     //--------------------------------------------------------------------------------------
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Pong");
+    const Texture2D background = LoadTexture("resources/background.png");
+    const Texture2D cup = LoadTexture("resources/cup.png");
 
     // Global State Machine
     Global_StateMachine = SERVE_ENTER;
@@ -150,7 +152,8 @@ int main()
         // Draw in screen
         BeginDrawing();
 
-        ClearBackground(BLACK); 
+        DrawTextureEx(background, (Vector2){0, 0}, 0, 1.26, WHITE);
+        DrawTextureEx(cup, (Vector2){SCREEN_WIDTH/2-(37.5), SCREEN_HEIGHT-140}, 0, 0.25, WHITE);
         switch(Global_StateMachine)
         {
             case SERVE_ENTER:
