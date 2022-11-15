@@ -8,6 +8,7 @@
 
 #define DELTA_TIME GetFrameTime()
 
+#define PADDLE_SPEED 400
 #define LATERAL_DISTANCE 50 // Paddle distance from screen borders
 // Paddle dimensions
 
@@ -44,9 +45,9 @@ int min(int a, int b);
 int max(int a, int b);
 bool collides(tBall ball, Rectangle paddle);
 
-void Player_Update();
+void Player1_Update();
 void Ball_Update();
-void AI_Update();
+void Player2_Update();
 
 
 // Game State Functions
@@ -69,12 +70,12 @@ void End_Draw();
 //----------------------------------------------------------------------------------
 static STATE_MACHINE Global_StateMachine;
 
-static Rectangle Player;
-static Rectangle AI_Paddle;
+static Rectangle Player1;
+static Rectangle Player2;
 static tBall Ball;
 
-static int PlayerPoints;
-static int AIPoints;
+static int Player1Points;
+static int Player2Points;
 
 
 
@@ -91,21 +92,21 @@ int main()
     Global_StateMachine = SERVE_ENTER;
 
     // Player and AI paddle
-    Player.width = 18;
-    Player.height = 86;
-    Player.x = LATERAL_DISTANCE;
-    Player.y = SCREEN_HEIGHT/2 - Player.height/2;
+    Player1.width = 18;
+    Player1.height = 86;
+    Player1.x = LATERAL_DISTANCE;
+    Player1.y = SCREEN_HEIGHT/2 - Player1.height/2;
 
-    AI_Paddle.width = 18;
-    AI_Paddle.height = 86;
-    AI_Paddle.x = SCREEN_WIDTH - (LATERAL_DISTANCE + AI_Paddle.width);
-    AI_Paddle.y = SCREEN_HEIGHT/2 - AI_Paddle.height/2;
+    Player2.width = 18;
+    Player2.height = 86;
+    Player2.x = SCREEN_WIDTH - (LATERAL_DISTANCE + Player2.width);
+    Player2.y = SCREEN_HEIGHT/2 - Player2.height/2;
 
     // Ball
     Ball.width = Ball.height = 15;
 
     // Points
-    PlayerPoints = AIPoints = 0;
+    Player1Points = Player2Points = 0;
 
 
     //--------------------------------------------------------------------------------------
@@ -148,6 +149,7 @@ int main()
 
         // Draw in screen
         BeginDrawing();
+        ClearBackground(BLACK); 
 
         switch(Global_StateMachine)
         {
@@ -216,7 +218,16 @@ bool collides(tBall ball, Rectangle paddle) {
 }
 
 
-void Player_Update() {
+void Player1_Update() {
+    
+    if (IsKeyDown(KEY_W)) {
+        Player1.y -= PADDLE_SPEED * DELTA_TIME;
+        Player1.y = max(Player1.y, 0);
+    }
+    else if (IsKeyDown(KEY_S)) {
+        Player1.y += PADDLE_SPEED * DELTA_TIME;
+        Player1.y = min(Player1.y, SCREEN_HEIGHT - Player1.height);
+    }
 
 }
 
@@ -226,7 +237,16 @@ void Ball_Update() {
 }
 
 
-void AI_Update() {
+void Player2_Update() {
+    
+    if (IsKeyDown(KEY_UP)) {
+        Player2.y -= PADDLE_SPEED * DELTA_TIME;
+        Player2.y = max(Player2.y, 0);
+    }
+    else if (IsKeyDown(KEY_DOWN)) {
+        Player2.y += PADDLE_SPEED * DELTA_TIME;
+        Player2.y = min(Player2.y, SCREEN_HEIGHT - Player2.height);
+    }
 
 }
 
@@ -246,14 +266,21 @@ void Serve_Enter() {
 
 
 void Serve_Update() {
+    if (IsKeyPressed(KEY_ENTER))
+    {
+        Global_StateMachine = GAME_ENTER;
+    }
 
+    Player1_Update();
+    Player2_Update();
 }
 
 
 void Serve_Draw() {
+    DrawText("Press ENTER to start", 400, 150, 40, WHITE);
 
-    DrawRectangle(Player.x, Player.y, Player.width, Player.height, WHITE); // Player Paddle
-    DrawRectangle(AI_Paddle.x, AI_Paddle.y, AI_Paddle.width, AI_Paddle.height, WHITE); // AI Paddle
+    DrawRectangle(Player1.x, Player1.y, Player1.width, Player1.height, WHITE); // Player Paddle
+    DrawRectangle(Player2.x, Player2.y, Player2.width, Player2.height, WHITE); // AI Paddle
     DrawRectangle(Ball.x, Ball.y, Ball.width, Ball.height, WHITE); // Ball
 }
 
