@@ -9,7 +9,7 @@
 #define DELTA_TIME GetFrameTime()
 
 #define LATERAL_DISTANCE 50 // Paddle distance from screen borders
-
+// Paddle dimensions
 
 
 //----------------------------------------------------------------------------------
