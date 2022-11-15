@@ -43,6 +43,9 @@ typedef struct {
 int min(int a, int b);
 int max(int a, int b);
 bool collides(tBall ball, Rectangle paddle);
+void playerupdate{}
+void ballupdate
+void AIupdate
 
 
 // Game State Functions
@@ -211,7 +214,9 @@ bool collides(tBall ball, Rectangle paddle) {
     return true;
 }
 
-
+void playerupdate{}
+void ballupdate{}
+void AIupdate{}
 
 
 //----------------------------------------------------------------------------------
