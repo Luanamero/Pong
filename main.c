@@ -105,6 +105,7 @@ int main()
     InitAudioDevice();
     paddle_hit = LoadSound("resources/paddle_hit.wav");
     score = LoadSound("resources/score.wav");
+    SetSoundVolume(score, 0.5);
     wall_hit = LoadSound("resources/wall_hit.wav");
 
     // Global State Machine
