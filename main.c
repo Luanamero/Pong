@@ -12,7 +12,16 @@
 
 #define PADDLE_SPEED 650
 #define LATERAL_DISTANCE 50 // Paddle distance from screen borders
-// Paddle dimensions
+
+
+
+//----------------------------------------------------------------------------------
+// Sound Effects
+//----------------------------------------------------------------------------------
+static Sound paddle_hit;
+static Sound score;
+static Sound wall_hit;
+
 
 
 //----------------------------------------------------------------------------------
@@ -91,6 +100,12 @@ int main()
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Pong");
     const Texture2D background = LoadTexture("resources/background.png");
     const Texture2D cup = LoadTexture("resources/cup.png");
+
+    // Audio
+    InitAudioDevice();
+    paddle_hit = LoadSound("resources/paddle_hit.wav");
+    score = LoadSound("resources/score.wav");
+    wall_hit = LoadSound("resources/wall_hit.wav");
 
     // Global State Machine
     Global_StateMachine = SERVE_ENTER;
@@ -183,6 +198,7 @@ int main()
 
     // De-Initialization
     //--------------------------------------------------------------------------------------
+    CloseAudioDevice();
     CloseWindow();                  // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
 
@@ -239,26 +255,29 @@ void Player1_Update() {
 
 void Ball_Update() {
     
-        // Update ball position
-        Ball.x += Ball.dx * DELTA_TIME;
-        Ball.y += Ball.dy * DELTA_TIME;
-    
-        // Check collision with top and bottom walls
-        if (Ball.y <= 0 || Ball.y >= SCREEN_HEIGHT - Ball.height) {
-            Ball.dy *= -1.03;
-        }
-    
-        // Check collision with player 1 paddle
-        if (collides(Ball, Player1)) {
-            Ball.dx *= -1.1;
-            Ball.x = Player1.x + Player1.width;
-        }
-    
-        // Check collision with player 2 paddle
-        if (collides(Ball, Player2)) {
-            Ball.dx *= -1.1;
-            Ball.x = Player2.x - Ball.width;
-        }
+    // Update ball position
+    Ball.x += Ball.dx * DELTA_TIME;
+    Ball.y += Ball.dy * DELTA_TIME;
+
+    // Check collision with top and bottom walls
+    if (Ball.y <= 0 || Ball.y >= SCREEN_HEIGHT - Ball.height) {
+        PlaySound(wall_hit);
+        Ball.dy *= -1.03;
+    }
+
+    // Check collision with player 1 paddle
+    if (collides(Ball, Player1)) {
+        PlaySound(paddle_hit);
+        Ball.dx *= -1.1;
+        Ball.x = Player1.x + Player1.width;
+    }
+
+    // Check collision with player 2 paddle
+    if (collides(Ball, Player2)) {
+        PlaySound(paddle_hit);
+        Ball.dx *= -1.1;
+        Ball.x = Player2.x - Ball.width;
+    }
              
 }
 
@@ -336,6 +355,7 @@ void Game_Update() {
 
     if (Ball.x < 0)
     {
+        PlaySound(score);
         Player2Points++;
         if (Player2Points == WIN_POINTS)
         {
@@ -348,6 +368,7 @@ void Game_Update() {
     }
     else if (Ball.x > SCREEN_WIDTH)
     {
+        PlaySound(score);
         Player1Points++;
         if (Player1Points == WIN_POINTS)
         {
