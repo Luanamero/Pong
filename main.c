@@ -8,6 +8,8 @@
 
 #define DELTA_TIME GetFrameTime()
 
+#define WIN_POINTS 5
+
 #define PADDLE_SPEED 650
 #define LATERAL_DISTANCE 50 // Paddle distance from screen borders
 // Paddle dimensions
@@ -335,12 +337,26 @@ void Game_Update() {
     if (Ball.x < 0)
     {
         Player2Points++;
-        Global_StateMachine = SERVE_ENTER;
+        if (Player2Points == WIN_POINTS)
+        {
+            Global_StateMachine = END_ENTER;
+        }
+        else
+        {
+            Global_StateMachine = SERVE_ENTER;
+        }
     }
     else if (Ball.x > SCREEN_WIDTH)
     {
         Player1Points++;
-        Global_StateMachine = SERVE_ENTER;
+        if (Player1Points == WIN_POINTS)
+        {
+            Global_StateMachine = END_ENTER;
+        }
+        else
+        {
+            Global_StateMachine = SERVE_ENTER;
+        }
     }
 }
 
@@ -371,10 +387,19 @@ void End_Enter() {
 
 
 void End_Update() {
-
+    if (IsKeyPressed(KEY_ENTER))
+    {
+        Player1Points = 0;
+        Player2Points = 0;
+        Global_StateMachine = SERVE_ENTER;
+    }
 }
 
 
 void End_Draw() {
-
+    const int text_width = MeasureText(TextFormat("Player %i wins!", Player1Points > Player2Points ? 1 : 2), 60);
+    const int text_size =  MeasureText("Press ENTER to restart", 40);
+    
+    DrawText(TextFormat("Player %i Wins!", (Player1Points > Player2Points ? 1 : 2)), SCREEN_WIDTH/2-(text_width/2), 150, 60, WHITE);
+    DrawText(TextFormat("Press ENTER to play again"), SCREEN_WIDTH/2-(text_size/2), 250, 40, WHITE);
 }
