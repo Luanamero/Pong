@@ -22,3 +22,10 @@ Development:
 
 Sounf Effects:
 - The Sound Effects were taken from [CS50's Introduction to Game Development](https://cs50.harvard.edu/games/2018/), specifically from [Pong](https://cs50.harvard.edu/games/2018/projects/0/pong/) lecture
+
+
+<br>
+
+## About the License
+
+You are free to use, share, modify and build upon this project as long as you give credit to all of the authors listed in *Credits* section
